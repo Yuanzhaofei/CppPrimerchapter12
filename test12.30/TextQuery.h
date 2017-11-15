@@ -6,6 +6,7 @@
 #include<map>
 #include<set>
 #include<memory>
+#include<iostream>
 using namespace std;
 class TextQuery {
 public:
@@ -14,7 +15,8 @@ public:
 	TextQuery();//默认构造函数
 	TextQuery(ifstream & infile);//利用输入流构造
 	//查询函数
-	void query(const string&);//输入单词，进行查询
+	TextQuery query(const string&);//输入单词，进行查询,返回
+	ostream & print(ostream &os);//打印结果到输出流
 private:
 	shared_ptr<vector<string>> text;//保存输入文件,为底层共享数据
 	shared_ptr<map<string, set<size_type>>> queryMap;//保存查询单词及行号

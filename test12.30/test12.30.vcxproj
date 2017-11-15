@@ -112,7 +112,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="readme.h" />
-    <ClCompile Include="runQueries.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="TextQuery.cpp" />
   </ItemGroup>
   <ItemGroup>
