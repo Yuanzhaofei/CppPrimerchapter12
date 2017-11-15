@@ -6,20 +6,20 @@
 #include<vector>
 #include<sstream>
 //TextQuery成员函数定义
-TextQuery::TextQuery():text(make_shared<vector<string>>()), queryMap(make_shared<map<string, set<size_type>>>()) {}//默认构造函数
-TextQuery::TextQuery(ifstream& infile) :text(make_shared<vector<string>>()), queryMap(make_shared<map<string, set<size_type>>>()) {
+TextQuery::TextQuery():file(make_shared<vector<string>>()), queryMap(make_shared<map<string, set<line_no>>>()) {}//默认构造函数
+TextQuery::TextQuery(ifstream& infile) : file(make_shared<vector<string>>()), queryMap(make_shared<map<string, set<line_no>>>()) {
 	string line;
 	while (getline(infile, line))
-		text->push_back(line);//将一行读入text中
+		file->push_back(line);//将一行读入text中
 }//利用输入流构造
 
-TextQuery TextQuery::query(const string& s) {
-	auto ret = queryMap->insert({ s, set<size_type>() });//关联容器插入后，会返回一个pair
+TextQuery TextQuery::query(const string& s)const {
+	auto ret = queryMap->insert({ s, set<line_no>() });//关联容器插入后，会返回一个pair
 	if (ret.second) {
 		//插入成功，此时s还未查询
-		auto beg = text->cbegin();//指向一行文本的迭代器
-		size_type lineNum = 1;//存放当前行号
-		while (beg!=text->cend()) {
+		auto beg = file->cbegin();//指向一行文本的迭代器
+		line_no lineNum = 1;//存放当前行号
+		while (beg!= file->cend()) {
 			string word;//存放待查单词
 			istringstream line(*beg);//string流绑定一行文本
 			while (line >> word) {
@@ -37,7 +37,7 @@ TextQuery TextQuery::query(const string& s) {
 	return *this;
 }//输入单词，进行查询
 
-ostream &  TextQuery::print(ostream &os) {
+ostream &  TextQuery::print(ostream &os)const {
 	auto beg_map = this->queryMap->cbegin();//map首迭代器
 	while (beg_map != this->queryMap->cend()) {
 		//按map中顺序打印某个单词的查询结果
@@ -46,7 +46,7 @@ ostream &  TextQuery::print(ostream &os) {
 		while (beg_set != beg_map->second.cend()) {
 			//打印每行
 			os << "line: " << *beg_set << ", "
-				<< (*this->text)[*beg_set-1] << endl;
+				<< (*this->file)[*beg_set-1] << endl;
 			++beg_set;
 		}
 		os << "the result of " << beg_map->first << " ends here." << endl;
