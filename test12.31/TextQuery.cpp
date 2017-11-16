@@ -7,11 +7,11 @@
 #include<sstream>
 //TextQuery成员函数定义
 //构造函数
-TextQuery::TextQuery(ifstream& infile) : file(make_shared<vector<string>>()) {
+TextQuery::TextQuery(ifstream& infile) {
 	string text;
 	while (getline(infile, text)) {
-		file->push_back(text);//将一行读入text中
-		auto n = file->size() - 1;
+		file.push_back(text);//将一行读入text中
+		auto n = file.size() - 1;//当前行号
 		istringstream line(text);
 		string word;
 		while (line >> word) {
@@ -37,8 +37,10 @@ ostream &print(ostream &os, const QueryResult & qr) {
 		<< (qr.lines->size() > 1 ? "times " : "time ") << endl;
 	for (auto num : *qr.lines) {
 		//打印每一行的文本
-		os << "\t(line" << num + 1 << ") "
-			<< *(qr.file->cbegin() + num) << endl;
+		os << "\t(line" << num + 1 << ") " << ends;//打印行号
+		StrBlobPtr linePtr(qr.get_file(),num);
+		os << linePtr.deref() << endl;
+			//<< *(qr.file.cbegin() + num) << endl;
 		
 	}
 	return os;
